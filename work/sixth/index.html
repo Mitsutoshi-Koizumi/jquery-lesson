@@ -17,8 +17,11 @@
   <script>
   $(document).on('click', '#pokemon_search', function() {
 
+    let pokemonId = Math.floor(Math.random() * 151) + 1;
+
     $.ajax({
-        url: 'https://pokeapi.co/api/v2/pokemon/1',
+      
+        url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
         type: 'GET',
         dataType: 'json',
 
@@ -76,7 +79,6 @@
           $('#wrapper').html(doneHtml);
       }
     });
-
     } else {
 
       let failHtml = `
