@@ -15,7 +15,24 @@
   </div>
   <script src="../../common/js/jquery.js"></script>
   <script>
-    // 回答はここに書いてね
+   $(document).on('click', '#pokemon_search', function() {
+
+    $.ajax({
+        url: 'https://pokeapi.co/api/v2/pokemon/1',
+        type: 'GET',
+        dataType: 'json',
+
+        success: function(data) {
+            console.log(data);
+            alert('取得成功：' + data.name);
+        },
+
+        error: function() {
+            console.log('ポケモンの取得に失敗しました');
+        }
+    });
+
+});
   </script>
 </body>
 </html>
