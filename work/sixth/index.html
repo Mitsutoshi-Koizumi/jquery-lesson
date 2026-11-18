@@ -52,6 +52,19 @@
         }
     });
   });
+
+  $(document).on('click', '#catch', function() {
+
+    let random = Math.random();
+
+    if(random < 0.5){
+      console.log("成功");
+    }else{
+      console.log("失敗");
+    }
+  });
+
+
   </script>
 </body>
 </html>
