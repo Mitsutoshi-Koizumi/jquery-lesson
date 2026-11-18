@@ -15,7 +15,7 @@
   </div>
   <script src="../../common/js/jquery.js"></script>
   <script>
-   $(document).on('click', '#pokemon_search', function() {
+  $(document).on('click', '#pokemon_search', function() {
 
     $.ajax({
         url: 'https://pokeapi.co/api/v2/pokemon/1',
@@ -23,16 +23,35 @@
         dataType: 'json',
 
         success: function(data) {
-            console.log(data);
-            alert('取得成功：' + data.name);
-        },
 
-        error: function() {
-            console.log('ポケモンの取得に失敗しました');
+            $.ajax({
+                url: data.species.url,
+                type: 'GET',
+                dataType: 'json',
+
+                success: function(speciesData) {
+
+                    let japaneseName = speciesData.names.find(function(item) {
+                        return item.language.name === 'ja';
+                    });
+
+                    let encountHtml = `
+                        <h2 class="name">${japaneseName.name} が現れた！</h2>
+                        <div>
+                            <img class="img" src="${data.sprites.front_default}" alt="${japaneseName.name}">
+                        </div>
+                        <div class="mt">
+                            <button class="btn" id="catch">捕まえる</button>
+                            <button class="btn" data-js="reset">逃げる</button>
+                        </div>
+                    `;
+
+                    $('#wrapper').html(encountHtml);
+                }
+            });
         }
     });
-
-});
+  });
   </script>
 </body>
 </html>
