@@ -58,10 +58,42 @@
     let random = Math.random();
 
     if(random < 0.5){
-      console.log("成功");
-    }else{
-      console.log("失敗");
-    }
+      $.ajax({
+        url: 'https://pokeapi.co/api/v2/item/4',
+        type: 'GET',
+        dataType: 'json',
+
+        success: function(itemData) {
+
+          let doneHtml = `
+            <p class="name">ゲットしました</p>
+            <div>
+              <img class="img" src="${itemData.sprites.default}" alt="モンスターボール">
+            </div>
+            <button class="btn" data-js="reset">戻る</button>
+          `;
+
+          $('#wrapper').html(doneHtml);
+      }
+    });
+
+    } else {
+
+      let failHtml = `
+        <p class="text">逃げられてしまった...</p>
+        <button class="btn mt" data-js="reset">戻る</button>
+      `;
+
+      $('#wrapper').html(failHtml);
+   }
+  });
+
+  $(document).on('click', '[data-js="reset"]', function() {
+    let resetHtml = `
+      <button type="button" class="btn search-btn" id="pokemon_search">ポケモンを探す</button>
+    `;
+
+    $('#wrapper').html(resetHtml);
   });
 
 
