@@ -15,7 +15,127 @@
   </div>
   <script src="../../common/js/jquery.js"></script>
   <script>
-    // 回答はここに書いてね
+    $(function() {
+
+      function searchPokemon() {
+
+        let pokemonId = Math.floor(Math.random() * 151) + 1;
+
+        $.ajax({
+          url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
+          type: 'GET',
+          dataType: 'json',
+
+          success: function(data) {
+
+            $.ajax({
+              url: data.species.url,
+              type: 'GET',
+              dataType: 'json',
+
+              success: function(speciesData) {
+
+                let japaneseName = speciesData.names.find(function(item) {
+                  return item.language.name === 'ja';
+                });
+
+                let encountHtml = `
+                  <h2 class="name">${japaneseName.name} が現れた！</h2>
+                  <div>
+                    <img class="img" src="${data.sprites.front_default}" alt="${japaneseName.name}">
+                  </div>
+                  <div class="mt">
+                    <button class="btn" id="catch">捕まえる</button>
+                    <button class="btn" data-js="reset">逃げる</button>
+                  </div>
+                `;
+
+                $('#wrapper').html(encountHtml);
+              },
+              error: function() {
+                setError();
+              }
+            });
+          },
+          error: function() {
+            setError();
+          }
+        });
+      }
+
+      function catchPokemon() {
+
+        let random = Math.random();
+
+        if (random < 0.5) {
+          getBallImage();
+        } else {
+
+          let failHtml = `
+            <p class="text">逃げられてしまった...</p>
+            <button class="btn mt" data-js="reset">戻る</button>
+          `;
+
+          $('#wrapper').html(failHtml);
+        }
+      }
+
+      function getBallImage() {
+
+        $.ajax({
+          url: 'https://pokeapi.co/api/v2/item/4',
+          type: 'GET',
+          dataType: 'json',
+
+          success: function(itemData) {
+
+            let doneHtml = `
+              <p class="name">ゲットしました</p>
+              <div>
+                <img class="img" src="${itemData.sprites.default}" alt="モンスターボール">
+              </div>
+              <button class="btn" data-js="reset">戻る</button>
+            `;
+
+            $('#wrapper').html(doneHtml);
+          },
+          error: function() {
+            setError();
+          }
+        });
+      }
+
+      function resetScreen() {
+
+        let resetHtml = `
+          <button type="button" class="btn search-btn" id="pokemon_search">ポケモンを探す</button>
+        `;
+
+        $('#wrapper').html(resetHtml);
+      }
+
+      function setError() {
+        let errorHtml = `
+          <p class="text">データ取得に失敗しました。</p>
+          <button class="btn mt" data-js="reset">戻る</button>
+        `;
+
+        $('#wrapper').html(errorHtml);
+      }
+
+      $('#wrapper').on('click', '#pokemon_search', function() {
+        searchPokemon();
+      });
+
+      $('#wrapper').on('click', '#catch', function() {
+        catchPokemon();
+      });
+
+      $('#wrapper').on('click', '[data-js="reset"]', function() {
+        resetScreen();
+      });
+
+    });
   </script>
 </body>
 </html>
