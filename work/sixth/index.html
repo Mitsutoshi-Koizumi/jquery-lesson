@@ -51,8 +51,14 @@
                 `;
 
                 $('#wrapper').html(encountHtml);
+              },
+              error: function() {
+                setError();
               }
             });
+          },
+          error: function() {
+            setError();
           }
         });
       }
@@ -92,6 +98,9 @@
             `;
 
             $('#wrapper').html(doneHtml);
+          },
+          error: function() {
+            setError();
           }
         });
       }
@@ -103,6 +112,15 @@
         `;
 
         $('#wrapper').html(resetHtml);
+      }
+
+      function setError() {
+        let errorHtml = `
+          <p class="text">データ取得に失敗しました。</p>
+          <button class="btn mt" data-js="reset">戻る</button>
+        `;
+
+        $('#wrapper').html(errorHtml);
       }
 
       $('#wrapper').on('click', '#pokemon_search', function() {
